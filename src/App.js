@@ -4,7 +4,6 @@ import WalletModal from './WalletModal';
 import QRCodeModal from './QRCodeModal';
 import walletService from './walletService';
 
-const WALLET_ADDRESS = "AQaoHT1ZrQiYFncbUbSYbdecq8XR6c3QsK2DZNVLrUty";
 const PRESALE_END = new Date('2025-08-01T00:00:00Z').getTime();
 
 function App() {

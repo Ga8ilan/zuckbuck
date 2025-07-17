@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import './QRCodeModal.css';
 
@@ -8,44 +8,8 @@ const QRCodeModal = ({ isOpen, onClose, onWalletSelect, qrType = 'walletconnect'
   const [connectionStatus, setConnectionStatus] = useState('waiting'); // waiting, connecting, connected, failed
   const [pollingInterval, setPollingInterval] = useState(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      // Generate a unique session ID for this connection
-      const sessionId = Math.random().toString(36).substring(2, 15);
-      
-      let walletConnectUrl;
-      if (qrType === 'coinbase') {
-        // Coinbase mobile app QR code data
-        // This would typically use Coinbase's official connection URL
-        const origin = encodeURIComponent(window.location.origin);
-        const redirectUrl = encodeURIComponent(`${window.location.origin}/wallet-callback`);
-        walletConnectUrl = `https://www.coinbase.com/connect?client_id=YOUR_CLIENT_ID&redirect_uri=${redirectUrl}&response_type=code&scope=wallet:accounts:read&state=${sessionId}`;
-        
-        // For demo purposes, we'll use a simplified URL
-        // In production, you'd register your app with Coinbase and get a real client_id
-        walletConnectUrl = `https://www.coinbase.com/connect?app=zuckbuck&session=${sessionId}&redirect=${encodeURIComponent(window.location.origin)}`;
-      } else {
-        // WalletConnect QR code data
-        walletConnectUrl = `wc:${sessionId}@1?bridge=https%3A%2F%2Fbridge.walletconnect.org&key=YOUR_PROJECT_ID`;
-      }
-      
-      setQrCodeData(walletConnectUrl);
-      setIsLoading(false);
-      setConnectionStatus('waiting');
-      
-      // Start polling for connection status
-      startConnectionPolling();
-    } else {
-      // Clean up polling when modal closes
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        setPollingInterval(null);
-      }
-    }
-  }, [isOpen, qrType]);
-
   // Poll for wallet connection status
-  const startConnectionPolling = () => {
+  const startConnectionPolling = useCallback(() => {
     const interval = setInterval(async () => {
       try {
         if (qrType === 'coinbase') {
@@ -86,7 +50,42 @@ const QRCodeModal = ({ isOpen, onClose, onWalletSelect, qrType = 'walletconnect'
     }, 2000); // Check every 2 seconds
     
     setPollingInterval(interval);
-  };
+  }, [qrType, onConnectionSuccess]);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Generate a unique session ID for this connection
+      const sessionId = Math.random().toString(36).substring(2, 15);
+      
+      let walletConnectUrl;
+      if (qrType === 'coinbase') {
+        // Coinbase mobile app QR code data
+        // This would typically use Coinbase's official connection URL
+        const redirectUrl = encodeURIComponent(`${window.location.origin}/wallet-callback`);
+        walletConnectUrl = `https://www.coinbase.com/connect?client_id=YOUR_CLIENT_ID&redirect_uri=${redirectUrl}&response_type=code&scope=wallet:accounts:read&state=${sessionId}`;
+        
+        // For demo purposes, we'll use a simplified URL
+        // In production, you'd register your app with Coinbase and get a real client_id
+        walletConnectUrl = `https://www.coinbase.com/connect?app=zuckbuck&session=${sessionId}&redirect=${encodeURIComponent(window.location.origin)}`;
+      } else {
+        // WalletConnect QR code data
+        walletConnectUrl = `wc:${sessionId}@1?bridge=https%3A%2F%2Fbridge.walletconnect.org&key=YOUR_PROJECT_ID`;
+      }
+      
+      setQrCodeData(walletConnectUrl);
+      setIsLoading(false);
+      setConnectionStatus('waiting');
+      
+      // Start polling for connection status
+      startConnectionPolling();
+    } else {
+      // Clean up polling when modal closes
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        setPollingInterval(null);
+      }
+    }
+  }, [isOpen, qrType, startConnectionPolling, pollingInterval]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(qrCodeData);
