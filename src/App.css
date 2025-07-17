@@ -1,38 +1,337 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
+/* Navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Hero Section */
+.hero {
+  padding: 120px 2rem 80px 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #61dafb, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #cccccc;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-button {
+  background: linear-gradient(45deg, #61dafb, #ff6b6b);
+  color: #ffffff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Sections */
+section {
+  padding: 80px 0;
+}
+
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #61dafb;
+}
+
+/* Presale Section */
+.presale-section {
+  background-color: #1a1a1a;
+}
+
+.countdown-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.countdown {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff6b6b;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+}
+
+.wallet-button {
+  background-color: #61dafb;
+  color: #0a0a0a;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.wallet-button:hover {
+  background-color: #4fa8c7;
+}
+
+/* Email Section */
+.email-section {
+  background-color: #0a0a0a;
+}
+
+.email-form {
+  display: flex;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.email-form input {
+  flex: 1;
+  min-width: 250px;
+  padding: 1rem;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.email-form input:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
+.email-form button {
+  background-color: #61dafb;
+  color: #0a0a0a;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.email-form button:hover:not(:disabled) {
+  background-color: #4fa8c7;
+}
+
+.email-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.email-msg {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: bold;
+  min-height: 24px;
+}
+
+/* Funding Section */
+.funding-section {
+  background-color: #1a1a1a;
+}
+
+.progress-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(45deg, #61dafb, #ff6b6b);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Tokenomics Section */
+.tokenomics-section {
+  background-color: #0a0a0a;
+}
+
+.tokenomics-list {
+  list-style: none;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tokenomics-list li {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border-left: 4px solid #61dafb;
+}
+
+/* Roadmap Section */
+.roadmap-section {
+  background-color: #1a1a1a;
+}
+
+.roadmap-list {
+  list-style: none;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.roadmap-list li {
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #0a0a0a;
+  border-radius: 8px;
+  border-left: 4px solid #ff6b6b;
+}
+
+/* Community Section */
+.community-section {
+  background-color: #0a0a0a;
+  text-align: center;
+}
+
+.community-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.2rem;
+}
+
+/* Footer */
+.footer {
+  background-color: #1a1a1a;
+  padding: 2rem 0;
+  text-align: center;
+  color: #cccccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .nav-links {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .email-form {
+    flex-direction: column;
+  }
+  
+  .email-form input {
+    min-width: auto;
+  }
+  
+  section {
+    padding: 60px 0;
+  }
+  
+  section h2 {
+    font-size: 2rem;
+  }
+  
+  .countdown {
+    font-size: 2rem;
   }
 }
