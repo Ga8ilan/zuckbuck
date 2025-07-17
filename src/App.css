@@ -158,6 +158,28 @@ section h2 {
   background-color: #4fa8c7;
 }
 
+/* Wallet Connection Status */
+.wallet-connected {
+  background-color: rgba(97, 218, 251, 0.1);
+  border: 1px solid #61dafb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.wallet-connected p {
+  margin: 0.5rem 0;
+  color: #61dafb;
+  font-weight: bold;
+}
+
+.wallet-address {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #cccccc !important;
+  word-break: break-all;
+}
+
 /* Email Section */
 .email-section {
   background-color: #0a0a0a;

@@ -1,0 +1,213 @@
+.qr-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+
+.qr-modal {
+  background: #181818;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 450px;
+  width: 90vw;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.qr-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.qr-modal-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #cccccc;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.close-button:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: #ffffff;
+}
+
+.qr-modal-content {
+  padding: 2rem;
+  text-align: center;
+}
+
+.loading {
+  color: #61dafb;
+  font-size: 1.2rem;
+  padding: 2rem;
+}
+
+.qr-instructions {
+  margin-bottom: 2rem;
+}
+
+.qr-instructions p {
+  margin: 0.5rem 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.qr-subtitle {
+  color: #cccccc !important;
+  font-size: 0.9rem !important;
+}
+
+.qr-code-container {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  display: inline-block;
+  margin: 1rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.connection-status {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.status-message {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.status-message.waiting {
+  color: #61dafb;
+}
+
+.status-message.connecting {
+  color: #ffd700;
+  animation: pulse 1.5s infinite;
+}
+
+.status-message.connected {
+  color: #4caf50;
+}
+
+.status-message.failed {
+  color: #f44336;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.qr-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.copy-link-btn, .manual-connect-btn {
+  background-color: #61dafb;
+  color: #0a0a0a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.copy-link-btn:hover, .manual-connect-btn:hover {
+  background-color: #4fa8c7;
+}
+
+.supported-wallets {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.supported-wallets p {
+  margin: 0 0 1rem 0;
+  color: #cccccc;
+  font-size: 0.9rem;
+}
+
+.wallet-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.wallet-icons span {
+  background-color: rgba(255,255,255,0.05);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 480px) {
+  .qr-modal {
+    width: 95vw;
+    margin: 1rem;
+  }
+  
+  .qr-modal-header {
+    padding: 1rem;
+  }
+  
+  .qr-modal-content {
+    padding: 1rem;
+  }
+  
+  .qr-code-container {
+    padding: 0.5rem;
+  }
+  
+  .qr-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .wallet-icons {
+    flex-direction: column;
+    align-items: center;
+  }
+} 

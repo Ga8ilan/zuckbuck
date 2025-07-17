@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import WalletModal from './WalletModal';
+import QRCodeModal from './QRCodeModal';
+import walletService from './walletService';
 
 const WALLET_ADDRESS = "AQaoHT1ZrQiYFncbUbSYbdecq8XR6c3QsK2DZNVLrUty";
 const PRESALE_END = new Date('2025-08-01T00:00:00Z').getTime();
@@ -10,6 +13,43 @@ function App() {
   const [emailMsg, setEmailMsg] = useState("");
   const [emailColor, setEmailColor] = useState("black");
   const [submitting, setSubmitting] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [qrType, setQrType] = useState('walletconnect');
+  const [connectedWallet, setConnectedWallet] = useState(null);
+  const [walletAddress, setWalletAddress] = useState("");
+
+  // Initialize wallet state from service
+  useEffect(() => {
+    const initializeWalletState = () => {
+      const walletState = walletService.getWalletState();
+      if (walletState.isConnected) {
+        setConnectedWallet(walletState.walletType);
+        setWalletAddress(walletState.address);
+      }
+    };
+
+    // Initialize on component mount
+    initializeWalletState();
+
+    // Listen for wallet state changes
+    const handleWalletStateChange = (event) => {
+      const { walletType, address, isConnected } = event.detail;
+      if (isConnected) {
+        setConnectedWallet(walletType);
+        setWalletAddress(address);
+      } else {
+        setConnectedWallet(null);
+        setWalletAddress("");
+      }
+    };
+
+    window.addEventListener('walletStateChanged', handleWalletStateChange);
+
+    return () => {
+      window.removeEventListener('walletStateChanged', handleWalletStateChange);
+    };
+  }, []);
 
   // Countdown timer logic
   useEffect(() => {
@@ -30,13 +70,6 @@ function App() {
     updateCountdown();
     return () => clearInterval(interval);
   }, []);
-
-  // Copy address to clipboard
-  const copyAddress = () => {
-    navigator.clipboard.writeText(WALLET_ADDRESS)
-      .then(() => alert("Wallet address copied!"))
-      .catch(() => alert("Copy failed."));
-  };
 
   // Email form submit
   const handleEmailSubmit = async (e) => {
@@ -64,8 +97,70 @@ function App() {
     setSubmitting(false);
   };
 
+  // Handle wallet selection with real connections
+  const handleWalletSelect = async (walletType) => {
+    try {
+      let result;
+      
+      switch (walletType) {
+        case 'phantom':
+          result = await walletService.connectPhantom();
+          break;
+        case 'coinbase':
+          result = await walletService.connectCoinbase();
+          break;
+        case 'walletconnect':
+          result = await walletService.connectWalletConnect();
+          break;
+        case 'manual':
+          // Handle manual connection (could open a form or redirect)
+          return;
+        default:
+          throw new Error('Unknown wallet type');
+      }
+
+      if (result.success) {
+        if (result.showQRModal) {
+          // Show QR code modal for WalletConnect or Coinbase
+          setQrType(result.qrType || 'walletconnect');
+          setQrModalOpen(true);
+        } else if (result.address) {
+          // Direct connection for other wallets
+          setConnectedWallet(result.wallet);
+          setWalletAddress(result.address);
+        }
+      }
+    } catch (error) {
+      console.error('Wallet connection error:', error);
+    }
+  };
+
+  // Handle successful QR code connection
+  const handleQRConnection = (walletType, address) => {
+    walletService.handleQRConnection(walletType, address);
+    setConnectedWallet(walletType);
+    setWalletAddress(address);
+    setQrModalOpen(false);
+  };
+
+  // Disconnect wallet
+  const disconnectWallet = () => {
+    walletService.disconnect();
+    setConnectedWallet(null);
+    setWalletAddress("");
+    // No alert
+  };
+
   return (
     <div className="App">
+      <WalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} onWalletSelect={handleWalletSelect} />
+      <QRCodeModal 
+        isOpen={qrModalOpen} 
+        onClose={() => setQrModalOpen(false)} 
+        onWalletSelect={handleWalletSelect} 
+        qrType={qrType}
+        onConnectionSuccess={handleQRConnection}
+      />
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
@@ -97,7 +192,15 @@ function App() {
           <div className="countdown-container">
             <p><strong>Presale ends in:</strong></p>
             <div className="countdown">{countdown}</div>
-            <button className="wallet-button">Connect Wallet</button>
+            {connectedWallet ? (
+              <div className="wallet-connected">
+                <p>Connected: {connectedWallet}</p>
+                <p className="wallet-address">{walletAddress}</p>
+                <button className="wallet-button" onClick={disconnectWallet}>Disconnect</button>
+              </div>
+            ) : (
+              <button className="wallet-button" onClick={() => setWalletModalOpen(true)}>Connect Wallet</button>
+            )}
           </div>
         </div>
       </section>
